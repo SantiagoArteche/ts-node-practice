@@ -1,0 +1,28 @@
+import { mkdirSync, writeFileSync } from "fs";
+
+export interface SaveFileUseCase {
+  execute: (options: SaveFileOptions) => boolean;
+}
+
+export interface SaveFileOptions {
+  fileContent: string;
+  destination?: string;
+  fileName?: string;
+}
+
+export class SaveFile implements SaveFileUseCase {
+  execute({
+    fileContent,
+    fileName,
+    destination = "outputs",
+  }: SaveFileOptions): boolean {
+    try {
+      mkdirSync(destination, { recursive: true });
+      writeFileSync(`${destination}/${fileName}.txt`, fileContent);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+}
